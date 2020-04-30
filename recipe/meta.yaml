@@ -1,6 +1,8 @@
 {% set version = "1.16.0" %}
 {% set hash = "4b676b5d7d551e6cec9b5d9fc0811779534774f190208ae7f7a7f7309434b5bf" %}
 
+# build from ci-updates
+
 package:
   name: botocore
   version: {{ version }}
