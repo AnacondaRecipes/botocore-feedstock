@@ -25,6 +25,8 @@ requirements:
     - urllib3 >=1.25.4,<1.27
 
 test:
+  requires:
+    - pip
   imports:
     - botocore
     - botocore.docs
@@ -33,6 +35,8 @@ test:
     - botocore.vendored.requests
     - botocore.vendored.requests.packages
     - botocore.vendored.requests.packages.urllib3
+  commands:
+    - pip check
 
 about:
   home: http://aws.amazon.com/sdk-for-python/
