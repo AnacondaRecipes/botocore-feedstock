@@ -1,12 +1,12 @@
-{% set version = "1.21.63" %}
-{% set hash = "38c0a98aefc3ff01d9970d84939ff48dd994c49c81cf34ee366860d774852f88" %}
+{% set version = "1.23.43" %}
+{% set hash = "249f11712d756e8eb49f7affa5b45469a9b29fa35ae31a0dc51381b52a49526c" %}
 
 package:
   name: botocore
   version: {{ version }}
 
 source:
-  url: https://pypi.org/packages/source/b/botocore/botocore-{{ version }}.tar.gz
+  url: https://github.com/boto/botocore/archive/refs/tags/{{ version }}.tar.gz
   sha256: {{ hash }}
 
 build:
@@ -37,8 +37,18 @@ test:
   requires:
     - pip
     - python <3.10
+    - jsonschema
+    - pytest
+    - pytest-cov
+    - pytest-xdist
+    - atomicwrites  # [win]
+    - colorama      # [win]
+  source_files:
+    - tests/*
+    - scripts/ci/run-tests
   commands:
     - pip check
+    - python scripts/ci/run-tests --with-cov
 
 about:
   home: http://aws.amazon.com/sdk-for-python/
