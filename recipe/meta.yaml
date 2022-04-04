@@ -1,4 +1,4 @@
-{% set version = "1.23.32" %}
+{% set version = "1.24.32" %}
 {% set hash = "5c2dab84f21b2a8c00bdab2150149be0ca0c8e8dd0b38712fa3562af5cfe53a2" %}
 
 package:
