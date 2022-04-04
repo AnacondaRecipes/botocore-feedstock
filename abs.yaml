@@ -1,2 +1,4 @@
 channels:
   - c3i_test2
+build_parameters:
+  - ""
