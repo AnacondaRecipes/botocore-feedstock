@@ -50,7 +50,7 @@ about:
   description: |
     Provides the core functionality of Boto3, the AWS SDK for Python
   dev_url: https://github.com/boto/botocore
-  doc_url: https://botocore.readthedocs.io/en/latest/
+  doc_url: https://botocore.amazonaws.com/v1/documentation/api/latest/index.html
 
 extra:
   recipe-maintainers:
