@@ -1,2 +1,2 @@
-- channels:
--   scrass_org: s3fs
+channels:
+  scrass_org: s3fs
