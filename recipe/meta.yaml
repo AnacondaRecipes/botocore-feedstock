@@ -1,12 +1,13 @@
+{% set name = "botocore" %}
 {% set version = "1.27.59" %}
 {% set hash = "eda4aed6ee719a745d1288eaf1beb12f6f6448ad1fa12f159405db14ba9c92cf" %}
 
 package:
-  name: botocore
+  name: {{ name|lower }}
   version: {{ version }}
 
 source:
-  url: https://pypi.org/packages/source/b/botocore/botocore-{{ version }}.tar.gz
+  url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/botocore-{{ version }}.tar.gz
   sha256: {{ hash }}
 
 build:
