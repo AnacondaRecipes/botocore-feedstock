@@ -46,14 +46,12 @@ about:
   home: https://aws.amazon.com/sdk-for-python/
   license_file: LICENSE.txt
   license: Apache-2.0
-  license_url: https://aws.amazon.com/apache-2-0/
   license_family: Apache
   summary: Low-level, data-driven core of boto 3.
   description: |
     Provides the core functionality of Boto3, the AWS SDK for Python
   dev_url: https://github.com/boto/botocore
   doc_url: https://botocore.amazonaws.com/v1/documentation/api/latest/index.html
-  doc_source_url: https://github.com/boto/botocore/tree/{{ version }}/docs
 
 extra:
   recipe-maintainers:
