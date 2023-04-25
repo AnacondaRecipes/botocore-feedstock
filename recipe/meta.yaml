@@ -1,6 +1,6 @@
 {% set name = "botocore" %}
-{% set version = "1.27.59" %}
-{% set hash = "eda4aed6ee719a745d1288eaf1beb12f6f6448ad1fa12f159405db14ba9c92cf" %}
+{% set version = "1.29.120" %}
+{% set hash = "82de714c06fcefbcf2f3854b81c51bf0c529ec902c6e927156ff47988aaeeb7a" %}
 
 package:
   name: {{ name|lower }}
