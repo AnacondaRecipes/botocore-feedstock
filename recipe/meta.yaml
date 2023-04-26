@@ -1,6 +1,6 @@
 {% set name = "botocore" %}
-{% set version = "1.27.59" %}
-{% set hash = "eda4aed6ee719a745d1288eaf1beb12f6f6448ad1fa12f159405db14ba9c92cf" %}
+{% set version = "1.29.76" %}
+{% set hash = "c2f67b6b3f8acf2968eafca06526f07b9fb0d27bac4c68a635d51abb675134a7" %}
 
 package:
   name: {{ name|lower }}
@@ -13,7 +13,7 @@ source:
 build:
   number: 0
   skip: true  # [py<37]
-  script: {{ PYTHON }} -m pip install . --no-deps --ignore-installed --no-cache-dir -vvv
+  script: {{ PYTHON }} -m pip install . --no-deps --ignore-installed --no-cache-dir --no-build-isolation -vvv
 
 #test
 requirements:
@@ -46,14 +46,12 @@ about:
   home: https://aws.amazon.com/sdk-for-python/
   license_file: LICENSE.txt
   license: Apache-2.0
-  license_url: https://aws.amazon.com/apache-2-0/
   license_family: Apache
   summary: Low-level, data-driven core of boto 3.
   description: |
     Provides the core functionality of Boto3, the AWS SDK for Python
   dev_url: https://github.com/boto/botocore
   doc_url: https://botocore.amazonaws.com/v1/documentation/api/latest/index.html
-  doc_source_url: https://github.com/boto/botocore/tree/{{ version }}/docs
 
 extra:
   recipe-maintainers:
