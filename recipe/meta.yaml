@@ -1,6 +1,6 @@
 {% set name = "botocore" %}
-{% set version = "1.29.76" %}
-{% set hash = "c2f67b6b3f8acf2968eafca06526f07b9fb0d27bac4c68a635d51abb675134a7" %}
+{% set version = "1.31.64" %}
+{% set hash = "d8eb4b724ac437343359b318d73de0cfae0fecb24095827e56135b0ad6b44caf" %}
 
 package:
   name: {{ name|lower }}
@@ -26,7 +26,8 @@ requirements:
     - python
     - jmespath >=0.7.1,<2.0.0
     - python-dateutil >=2.1,<3.0.0
-    - urllib3 >=1.25.4,<1.27
+    - urllib3 >=1.25.4,<1.27 # [py<310]
+    - urllib3 >=1.25.4,<2.1 # [py>=310]
 
 test:
   imports:
