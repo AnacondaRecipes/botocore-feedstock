@@ -36,6 +36,13 @@ requirements:
 # Skipping integration tests:
 {% set ignore_tests = " --ignore=tests/integration/" %}
 
+# RuntimeError: Unable to calculate correct timezone offset for "0"
+{% set tests_to_skip = "test_parse_timestamp_succeeds_with_fromtimestamp_oserror" %}  # [win]
+{% set tests_to_skip = tests_to_skip + "test_parse_timestamp_succeeds_with_fromtimestamp_overflowerror" %}  # [win]
+
+# RuntimeError: Unable to calculate correct timezone offset for "-2208988800"
+{% set tests_to_skip = tests_to_skip + "test_parse_epoch_negative_time" %}  # [win]
+
 test:
   source_files:
     - tests
@@ -49,7 +56,8 @@ test:
     - botocore.vendored.requests.packages.urllib3
   commands:
     - pip check
-    - pytest -v {{ ignore_tests }} tests
+    - pytest -v {{ ignore_tests }} tests  # [not win]
+    - pytest -v {{ ignore_tests }} -k "not ({{ tests_to_skip }})" tests  # [win]
   requires:
     - pip
     - pytest
