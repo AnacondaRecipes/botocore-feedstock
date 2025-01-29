@@ -38,10 +38,10 @@ requirements:
 
 # RuntimeError: Unable to calculate correct timezone offset for "0"
 {% set tests_to_skip = "test_parse_timestamp_succeeds_with_fromtimestamp_oserror" %}  # [win]
-{% set tests_to_skip = tests_to_skip + "test_parse_timestamp_succeeds_with_fromtimestamp_overflowerror" %}  # [win]
+{% set tests_to_skip = tests_to_skip + " or test_parse_timestamp_succeeds_with_fromtimestamp_overflowerror" %}  # [win]
 
 # RuntimeError: Unable to calculate correct timezone offset for "-2208988800"
-{% set tests_to_skip = tests_to_skip + "test_parse_epoch_negative_time" %}  # [win]
+{% set tests_to_skip = tests_to_skip + " or test_parse_epoch_negative_time" %}  # [win]
 
 test:
   source_files:
