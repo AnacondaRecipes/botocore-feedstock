@@ -1,26 +1,25 @@
 {% set name = "botocore" %}
-{% set version = "1.34.154" %}
-{% set hash = "64d9b4c85a504d77cb56dabb2ad717cd8e1717424a88edb458b01d1e5797262a" %}
+{% set version = "1.36.3" %}
 
 package:
   name: {{ name|lower }}
   version: {{ version }}
 
 source:
-  url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
-  sha256: {{ hash }}
+  url: https://github.com/boto/botocore/archive/{{ version }}.tar.gz
+  sha256: 0cd84a46953ec7f44edffd0feee18bc652c2868338d80738c85ba4103ea7941e
 
 build:
   number: 0
   skip: true  # [py<38]
   script: {{ PYTHON }} -m pip install . --no-deps --ignore-installed --no-cache-dir --no-build-isolation -vv
 
-#test
 requirements:
   host:
     - python
     - pip
     - setuptools
+    - packaging 24.1  # [py>311]
     - wheel
   run:
     - python
@@ -28,8 +27,26 @@ requirements:
     - python-dateutil >=2.1,<3.0.0
     - urllib3 >=1.25.4,<1.27       # [py<310]
     - urllib3 >=1.25.4,!=2.2.0,<3  # [py>=310]
+  run_constrained:
+    - awscrt 0.23.4
+
+# Integration tests are required to validate real AWS services like S3 and SQS, which are not available in our environment.
+# Error example:
+#   - botocore.exceptions.NoCredentialsError: Unable to locate credentials
+#   - botocore.exceptions.ClientError: An error occurred (NoSuchBucket) when calling the GetObject operation: The specified bucket does not exist
+# Skipping integration tests:
+{% set ignore_tests = " --ignore=tests/integration/" %}
+
+# RuntimeError: Unable to calculate correct timezone offset for "0"
+{% set tests_to_skip = "test_parse_timestamp_succeeds_with_fromtimestamp_oserror" %}  # [win]
+{% set tests_to_skip = tests_to_skip + " or test_parse_timestamp_succeeds_with_fromtimestamp_overflowerror" %}  # [win]
+
+# RuntimeError: Unable to calculate correct timezone offset for "-2208988800"
+{% set tests_to_skip = tests_to_skip + " or test_parse_epoch_negative_time" %}  # [win]
 
 test:
+  source_files:
+    - tests
   imports:
     - botocore
     - botocore.docs
@@ -38,16 +55,26 @@ test:
     - botocore.vendored.requests
     - botocore.vendored.requests.packages
     - botocore.vendored.requests.packages.urllib3
-  requires:
-    - pip
   commands:
     - pip check
+    - pytest -v {{ ignore_tests }} tests  # [not win]
+    # Disabled win tests. It takes too much time—around 5 hours.
+    # https://github.com/AnacondaRecipes/botocore-feedstock/pull/60#discussion_r1933937673
+    # - pytest -v {{ ignore_tests }} -k "not ({{ tests_to_skip }})" tests  # [win]
+  requires:
+    - pip
+    - pytest
+    - jsonschema
 
 about:
   home: https://aws.amazon.com/sdk-for-python/
-  license_file: LICENSE.txt
   license: Apache-2.0
   license_family: Apache
+  license_file:
+    - NOTICE
+    - LICENSE.txt
+    - tests/unit/auth/aws4_testsuite/LICENSE
+    - tests/unit/auth/aws4_testsuite/NOTICE
   summary: Low-level, data-driven core of boto 3.
   description: |
     Provides the core functionality of Boto3, the AWS SDK for Python
