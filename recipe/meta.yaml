@@ -57,7 +57,9 @@ test:
   commands:
     - pip check
     - pytest -v {{ ignore_tests }} tests  # [not win]
-    - pytest -v {{ ignore_tests }} -k "not ({{ tests_to_skip }})" tests  # [win]
+    # Disabled win tests. It takes too much time—around 5 hours.
+    # https://github.com/AnacondaRecipes/botocore-feedstock/pull/60#discussion_r1933937673
+    # - pytest -v {{ ignore_tests }} -k "not ({{ tests_to_skip }})" tests  # [win]
   requires:
     - pip
     - pytest
