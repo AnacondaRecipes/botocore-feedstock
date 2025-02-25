@@ -1,5 +1,5 @@
 {% set name = "botocore" %}
-{% set version = "1.36.3" %}
+{% set version = "1.37.0" %}
 
 package:
   name: {{ name|lower }}
@@ -7,7 +7,7 @@ package:
 
 source:
   url: https://github.com/boto/botocore/archive/{{ version }}.tar.gz
-  sha256: 0cd84a46953ec7f44edffd0feee18bc652c2868338d80738c85ba4103ea7941e
+  sha256: 14f317cf24be727e27b3d1e9a1e717deff82d8fc4141bf6e8c8a96eed1ad7eba
 
 build:
   number: 0
