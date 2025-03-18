@@ -6,7 +6,7 @@ package:
   version: {{ version }}
 
 source:
-  url: https://github.com/boto/botocore/archive/{{ version }}.tar.gz
+  url: https://github.com/boto/{{ name }}/archive/{{ version }}.tar.gz
   sha256: 31f46e626043ef2fa06dac908538e65acd87773283b3c5e17d41499e1ff5ebbf
 
 build:
