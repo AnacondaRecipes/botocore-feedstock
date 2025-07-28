@@ -42,18 +42,59 @@ test:
     - tests
   imports:
     - botocore
+    - botocore.args
+    - botocore.auth
+    - botocore.awsrequest
+    - botocore.client
+    - botocore.compat
+    - botocore.compress
+    - botocore.config
+    - botocore.configloader
+    - botocore.configprovider
+    - botocore.context
+    - botocore.credentials
+    - botocore.crt
+    - botocore.discovery
     - botocore.docs
-    - botocore.docs.bcdoc
+    - botocore.endpoint
+    - botocore.endpoint_provider
+    - botocore.errorfactory
+    - botocore.eventstream
+    - botocore.exceptions
+    - botocore.handlers
+    - botocore.history
+    - botocore.hooks
+    - botocore.httpchecksum
+    - botocore.httpsession
+    - botocore.loaders
+    - botocore.model
+    - botocore.monitoring
+    - botocore.paginate
+    - botocore.parsers
+    - botocore.regions
+    - botocore.response
+    - botocore.retries
+    - botocore.retries.base
+    - botocore.retryhandler
+    - botocore.serialize
+    - botocore.session
+    - botocore.signers
+    - botocore.stub
+    - botocore.tokens
+    - botocore.translate
+    - botocore.useragent
+    - botocore.utils
+    - botocore.validate
     - botocore.vendored
     - botocore.vendored.requests
     - botocore.vendored.requests.packages
     - botocore.vendored.requests.packages.urllib3
+    - botocore.waiter
   commands:
     - pip check
-    - pytest -v {{ ignore_tests }} tests  # [not win]
     # Disabled win tests. It takes too much time—around 5 hours.
     # https://github.com/AnacondaRecipes/botocore-feedstock/pull/60#discussion_r1933937673
-    # - pytest -v {{ ignore_tests }} -k "not ({{ tests_to_skip }})" tests  # [win]
+    - pytest -v {{ ignore_tests }} tests  # [not win]
   requires:
     - pip
     - pytest
