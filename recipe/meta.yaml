@@ -1,5 +1,5 @@
 {% set name = "botocore" %}
-{% set version = "1.37.10" %}
+{% set version = "1.39.8" %}
 
 package:
   name: {{ name|lower }}
@@ -7,7 +7,7 @@ package:
 
 source:
   url: https://github.com/boto/{{ name }}/archive/{{ version }}.tar.gz
-  sha256: 31f46e626043ef2fa06dac908538e65acd87773283b3c5e17d41499e1ff5ebbf
+  sha256: 1038e431e61fdd3a0fccb87280243037c73ff6120d2499b6f2eaa799fa7d6df0
 
 build:
   number: 0
@@ -37,13 +37,6 @@ requirements:
 # Skipping integration tests:
 {% set ignore_tests = " --ignore=tests/integration/" %}
 
-# RuntimeError: Unable to calculate correct timezone offset for "0"
-{% set tests_to_skip = "test_parse_timestamp_succeeds_with_fromtimestamp_oserror" %}  # [win]
-{% set tests_to_skip = tests_to_skip + " or test_parse_timestamp_succeeds_with_fromtimestamp_overflowerror" %}  # [win]
-
-# RuntimeError: Unable to calculate correct timezone offset for "-2208988800"
-{% set tests_to_skip = tests_to_skip + " or test_parse_epoch_negative_time" %}  # [win]
-
 test:
   source_files:
     - tests
@@ -67,7 +60,7 @@ test:
     - jsonschema
 
 about:
-  home: https://aws.amazon.com/sdk-for-python/
+  home: https://aws.amazon.com/sdk-for-python
   license: Apache-2.0
   license_family: Apache
   license_file:
