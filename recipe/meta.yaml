@@ -1,5 +1,5 @@
 {% set name = "botocore" %}
-{% set version = "1.37.10" %}
+{% set version = "1.39.8" %}
 
 package:
   name: {{ name|lower }}
@@ -7,20 +7,20 @@ package:
 
 source:
   url: https://github.com/boto/{{ name }}/archive/{{ version }}.tar.gz
-  sha256: 31f46e626043ef2fa06dac908538e65acd87773283b3c5e17d41499e1ff5ebbf
+  sha256: 1038e431e61fdd3a0fccb87280243037c73ff6120d2499b6f2eaa799fa7d6df0
 
 build:
   number: 0
-  skip: true  # [py<38]
+  skip: true  # [py<39]
   script: {{ PYTHON }} -m pip install . --no-deps --ignore-installed --no-cache-dir --no-build-isolation -vv
 
 requirements:
   host:
-    - python
     - pip
-    - setuptools
-    - packaging 24.1  # [py>311]
-    - wheel
+    - python
+    - setuptools >=71.1.0
+    - wheel >=0.43.0
+    - packaging 24.1  # [py>312]
   run:
     - python
     - jmespath >=0.7.1,<2.0.0
@@ -37,37 +37,71 @@ requirements:
 # Skipping integration tests:
 {% set ignore_tests = " --ignore=tests/integration/" %}
 
-# RuntimeError: Unable to calculate correct timezone offset for "0"
-{% set tests_to_skip = "test_parse_timestamp_succeeds_with_fromtimestamp_oserror" %}  # [win]
-{% set tests_to_skip = tests_to_skip + " or test_parse_timestamp_succeeds_with_fromtimestamp_overflowerror" %}  # [win]
-
-# RuntimeError: Unable to calculate correct timezone offset for "-2208988800"
-{% set tests_to_skip = tests_to_skip + " or test_parse_epoch_negative_time" %}  # [win]
-
 test:
   source_files:
     - tests
   imports:
     - botocore
+    - botocore.args
+    - botocore.auth
+    - botocore.awsrequest
+    - botocore.client
+    - botocore.compat
+    - botocore.compress
+    - botocore.config
+    - botocore.configloader
+    - botocore.configprovider
+    - botocore.context
+    - botocore.credentials
+    - botocore.crt
+    - botocore.discovery
     - botocore.docs
-    - botocore.docs.bcdoc
+    - botocore.endpoint
+    - botocore.endpoint_provider
+    - botocore.errorfactory
+    - botocore.eventstream
+    - botocore.exceptions
+    - botocore.handlers
+    - botocore.history
+    - botocore.hooks
+    - botocore.httpchecksum
+    - botocore.httpsession
+    - botocore.loaders
+    - botocore.model
+    - botocore.monitoring
+    - botocore.paginate
+    - botocore.parsers
+    - botocore.regions
+    - botocore.response
+    - botocore.retries
+    - botocore.retries.base
+    - botocore.retryhandler
+    - botocore.serialize
+    - botocore.session
+    - botocore.signers
+    - botocore.stub
+    - botocore.tokens
+    - botocore.translate
+    - botocore.useragent
+    - botocore.utils
+    - botocore.validate
     - botocore.vendored
     - botocore.vendored.requests
     - botocore.vendored.requests.packages
     - botocore.vendored.requests.packages.urllib3
+    - botocore.waiter
   commands:
     - pip check
-    - pytest -v {{ ignore_tests }} tests  # [not win]
     # Disabled win tests. It takes too much time—around 5 hours.
     # https://github.com/AnacondaRecipes/botocore-feedstock/pull/60#discussion_r1933937673
-    # - pytest -v {{ ignore_tests }} -k "not ({{ tests_to_skip }})" tests  # [win]
+    - pytest -v {{ ignore_tests }} tests  # [not win]
   requires:
     - pip
-    - pytest
-    - jsonschema
+    - pytest >=8.1.1
+    - jsonschema >=4.23.0
 
 about:
-  home: https://aws.amazon.com/sdk-for-python/
+  home: https://aws.amazon.com/sdk-for-python
   license: Apache-2.0
   license_family: Apache
   license_file:
