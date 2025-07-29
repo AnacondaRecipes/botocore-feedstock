@@ -16,11 +16,11 @@ build:
 
 requirements:
   host:
-    - python
     - pip
-    - setuptools
-    - packaging 24.1  # [py>311]
-    - wheel
+    - python
+    - setuptools >=71.1.0
+    - wheel >=0.43.0
+    - packaging 24.1  # [py>312]
   run:
     - python
     - jmespath >=0.7.1,<2.0.0
@@ -97,8 +97,8 @@ test:
     - pytest -v {{ ignore_tests }} tests  # [not win]
   requires:
     - pip
-    - pytest
-    - jsonschema
+    - pytest >=8.1.1
+    - jsonschema >=4.23.0
 
 about:
   home: https://aws.amazon.com/sdk-for-python
