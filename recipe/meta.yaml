@@ -1,5 +1,5 @@
 {% set name = "botocore" %}
-{% set version = "1.40.54" %}
+{% set version = "1.40.46" %}
 
 package:
   name: {{ name|lower }}
@@ -7,7 +7,7 @@ package:
 
 source:
   url: https://github.com/boto/{{ name }}/archive/{{ version }}.tar.gz
-  sha256: ede9f34cbaaeabf3f1f3f4be004d6c75e713e1b45e6eb4f2a1f5cc387b92104f
+  sha256: 7790b6bf8b1967f3b21fe415875a5a7c6986c5a73162c16049701a532ef842b9
 
 build:
   number: 0
@@ -28,7 +28,7 @@ requirements:
     - urllib3 >=1.25.4,<1.27       # [py<310]
     - urllib3 >=1.25.4,!=2.2.0,<3  # [py>=310]
   run_constrained:
-    - awscrt 0.23.8
+    - awscrt 0.27.6
 
 # Integration tests are required to validate real AWS services like S3 and SQS, which are not available in our environment.
 # Error example:
