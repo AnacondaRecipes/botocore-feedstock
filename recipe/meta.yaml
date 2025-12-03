@@ -20,7 +20,7 @@ requirements:
     - python
     - setuptools >=71.1.0
     - wheel >=0.43.0
-    - packaging
+    - packaging ==24.1  # [py>=312 and py<314]
   run:
     - python
     - jmespath >=0.7.1,<2.0.0
@@ -104,6 +104,7 @@ test:
     - pip
     - pytest >=8.1.1
     - jsonschema >=4.23.0
+    - packaging
 
 about:
   home: https://aws.amazon.com/sdk-for-python
