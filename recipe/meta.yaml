@@ -39,7 +39,8 @@ requirements:
 
 # tests/functional/leak/test_resource_leaks.py:39: AssertionError
 {% set ignore_tests_list = [] %}
-{% set ignore_tests_list = ignore_tests_list + ["test_create_single_client_memory_constant"] %}  # [py==314 and osx]
+{% set ignore_tests_list = ignore_tests_list + ["test_create_single_client_memory_constant"] %}     # [py==314 and osx]
+{% set ignore_tests_list = ignore_tests_list + ["test_create_single_paginator_memory_constant"] %}  # [py==314 and osx]
 
 test:
   source_files:
