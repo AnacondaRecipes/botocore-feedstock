@@ -49,8 +49,8 @@ requirements:
 # 2025-12-03T14:28:48 Subdir: noarch Gathering repodata
 # Executing command: conda create ... -c file:///home/.../temp_channel/ -c pbp_src_multichannel botocore python=3.12
 # Error: Error: Package botocore not found in the fetched packages
-{% if not (linux and py == 312) %}
-test:
+
+test:   # [not (linux and py==312)]
   source_files:
     - tests
   imports:
@@ -112,7 +112,6 @@ test:
     - pip
     - pytest >=8.1.1
     - jsonschema >=4.23.0
-{% endif %}
 
 about:
   home: https://aws.amazon.com/sdk-for-python
