@@ -26,7 +26,7 @@ requirements:
     # --strict-channel-priority --override-channels -c file:///home/task_176477320693380/temp_channel/ 
     # -c pbp_src_multichannel botocore python=3.12
     # Error: Error: Package botocore not found in the fetched packages.
-    - packaging ==24.1  # [py>=312]
+    - packaging ==24.2  # [py==312 and linux]
     # - packaging       # [not (py==312 and linux)]
   run:
     - python
