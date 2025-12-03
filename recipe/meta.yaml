@@ -18,17 +18,9 @@ requirements:
   host:
     - pip
     - python
-    - setuptools
-    # - setuptools >=71.1.0
-    # - wheel >=0.43.0
-    # PBP/Taskcluster-orcestration issue
-    # this is workaround pinning packaging 24.1
-    # Executing command: conda create -n testenv --dry-run --json --quiet 
-    # --strict-channel-priority --override-channels -c file:///home/task_176477320693380/temp_channel/ 
-    # -c pbp_src_multichannel botocore python=3.12
-    # Error: Error: Package botocore not found in the fetched packages.
-    # - packaging ==24.1  # [py>=312]
-    # - packaging       # [not (py==312 and linux)]
+    - setuptools >=71.1.0
+    - wheel >=0.43.0
+    - packaging
   run:
     - python
     - jmespath >=0.7.1,<2.0.0
