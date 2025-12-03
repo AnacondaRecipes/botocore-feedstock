@@ -38,8 +38,8 @@ requirements:
 {% set ignore_tests = " --ignore=tests/integration/" %}
 
 # tests/functional/leak/test_resource_leaks.py:39: AssertionError
-{% set ignore_tests_list = "" %}
-{% set ignore_tests_list = " test_create_single_client_memory_constant" %}  # [py==314 and osx]
+{% set ignore_tests_list = [] %}
+{% set ignore_tests_list = ignore_tests_list + ["test_create_single_client_memory_constant"] %}  # [py==314 and osx]
 
 test:
   source_files:
@@ -98,7 +98,7 @@ test:
     - pip check
     # Disabled win tests. It takes too much time—around 5 hours.
     # https://github.com/AnacondaRecipes/botocore-feedstock/pull/60#discussion_r1933937673
-    - pytest -ra -v tests {{ ignore_tests }} -k "not slow and not ({{ ignore_tests_list | join(' or ') }})" # [not win]
+    - pytest -ra -v tests {{ ignore_tests }} -k "not slow{% if ignore_tests_list %} and not ({{ ignore_tests_list | join(' or ') }}){% endif %}"  # [not win]
   requires:
     - pip
     - pytest >=8.1.1
