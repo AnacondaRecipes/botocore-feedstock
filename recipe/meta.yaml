@@ -20,7 +20,7 @@ requirements:
     - python
     - setuptools >=71.1.0
     - wheel >=0.43.0
-    - packaging 24.1  # [py>312]
+    - packaging
   run:
     - python
     - jmespath >=0.7.1,<2.0.0
