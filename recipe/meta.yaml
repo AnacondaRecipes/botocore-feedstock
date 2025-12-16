@@ -1,5 +1,11 @@
 {% set name = "botocore" %}
-{% set version = "1.40.54" %}
+{% set version = "1.42.10" %}
+{% set ignore_tests = " --ignore=tests/integration/" %}
+{% set ignore_tests_list = [
+  
+] %}
+{% set ignore_tests_list = 'ignore_tests_list + ["test_create_single_client_memory_constant"]' %}  # [py==314 and osx]
+{% set ignore_tests_list = 'ignore_tests_list + ["test_create_single_paginator_memory_constant"]' %}  # [py==314 and osx]
 
 package:
   name: {{ name|lower }}
@@ -7,10 +13,10 @@ package:
 
 source:
   url: https://github.com/boto/{{ name }}/archive/{{ version }}.tar.gz
-  sha256: ede9f34cbaaeabf3f1f3f4be004d6c75e713e1b45e6eb4f2a1f5cc387b92104f
+  sha256: bdd8024959597ad0483c2ea26aff8e1ab938d33295b68134e4c681dcf59488ae
 
 build:
-  number: 1
+  number: 0
   skip: true  # [py<39]
   script: {{ PYTHON }} -m pip install . --no-deps --ignore-installed --no-cache-dir --no-build-isolation -vv
 
@@ -25,23 +31,17 @@ requirements:
     - python
     - jmespath >=0.7.1,<2.0.0
     - python-dateutil >=2.1,<3.0.0
-    - urllib3 >=1.25.4,<1.27       # [py<310]
+    - urllib3 >=1.25.4,!=2.2.0,<3  # [py>=310]
     - urllib3 >=1.25.4,!=2.2.0,<3  # [py>=310]
   run_constrained:
-    - awscrt 0.23.8
+    - awscrt ==0.29.2
 
 # Integration tests are required to validate real AWS services like S3 and SQS, which are not available in our environment.
 # Error example:
 #   - botocore.exceptions.NoCredentialsError: Unable to locate credentials
 #   - botocore.exceptions.ClientError: An error occurred (NoSuchBucket) when calling the GetObject operation: The specified bucket does not exist
 # Skipping integration tests:
-{% set ignore_tests = " --ignore=tests/integration/" %}
-
 # tests/functional/leak/test_resource_leaks.py:39: AssertionError
-{% set ignore_tests_list = [] %}
-{% set ignore_tests_list = ignore_tests_list + ["test_create_single_client_memory_constant"] %}     # [py==314 and osx]
-{% set ignore_tests_list = ignore_tests_list + ["test_create_single_paginator_memory_constant"] %}  # [py==314 and osx]
-
 test:
   source_files:
     - tests
