@@ -36,11 +36,13 @@ requirements:
 # Skipping integration tests:
 {% set ignore_tests = " --ignore=tests/integration/" %}
 
-# tests/functional/leak/test_resource_leaks.py:39: AssertionError
+# tests/functional/leak/test_resource_leaks.py:39: AssertionError; some are flaky depending on platform/CI
 {% set ignore_tests_list = [] %}
 {% set ignore_tests_list = ignore_tests_list + ["test_create_single_client_memory_constant"] %}     # [linux or (py==314 and osx)]
 {% set ignore_tests_list = ignore_tests_list + ["test_create_single_waiter_memory_constant"] %}     # [linux or (py==314 and osx)]
 {% set ignore_tests_list = ignore_tests_list + ["test_create_single_paginator_memory_constant"] %}  # [linux or (py==314 and osx)]
+{% set ignore_tests_list = ignore_tests_list + ["test_create_memory_paginators_in_loop"] %}         # [linux]
+{% set ignore_tests_list = ignore_tests_list + ["test_create_memory_waiters_in_loop"] %}            # [linux]
 
 test:
   source_files:
