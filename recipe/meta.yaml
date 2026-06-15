@@ -1,5 +1,5 @@
 {% set name = "botocore" %}
-{% set version = "1.43.24" %}
+{% set version = "1.43.0" %}
 
 package:
   name: {{ name|lower }}
@@ -7,24 +7,26 @@ package:
 
 source:
   url: https://pypi.org/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
-  sha256: 0c02f2b40e99419d496ece0ea2dcdedb5c45998c16fd1674276c7dbb30767a16
+  sha256: e933b31a2d644253e1d029d7d39e99ba41b87e29300534f189744cc438cdf928
 
 build:
   number: 0
   script: {{ PYTHON }} -m pip install . --no-deps --ignore-installed --no-cache-dir --no-build-isolation -vv
-  skip: true  # [py<310]
+  skip: true  # [py<39]
 
 requirements:
   host:
     - pip
     - python
     - setuptools >=71.1.0
+    - wheel >=0.46.3
     - packaging >=24.1
   run:
     - python
     - jmespath >=0.7.1,<2.0.0
     - python-dateutil >=2.1,<3.0.0
-    - urllib3 >=1.25.4,!=2.2.0,<3
+    - urllib3 >=1.25.4,<1.27       # [py<310]
+    - urllib3 >=1.25.4,!=2.2.0,<3  # [py>=310]
   run_constrained:
     # crt
     - awscrt 0.32.2
@@ -36,13 +38,10 @@ requirements:
 # Skipping integration tests:
 {% set ignore_tests = " --ignore=tests/integration/" %}
 
-# tests/functional/leak/test_resource_leaks.py:39: AssertionError; some are flaky depending on platform/CI
+# tests/functional/leak/test_resource_leaks.py:39: AssertionError
 {% set ignore_tests_list = [] %}
-{% set ignore_tests_list = ignore_tests_list + ["test_create_single_client_memory_constant"] %}     # [linux or (py==314 and osx)]
-{% set ignore_tests_list = ignore_tests_list + ["test_create_single_waiter_memory_constant"] %}     # [linux or (py==314 and osx)]
-{% set ignore_tests_list = ignore_tests_list + ["test_create_single_paginator_memory_constant"] %}  # [linux or (py==314 and osx)]
-{% set ignore_tests_list = ignore_tests_list + ["test_create_memory_paginators_in_loop"] %}         # [linux]
-{% set ignore_tests_list = ignore_tests_list + ["test_create_memory_waiters_in_loop"] %}            # [linux]
+{% set ignore_tests_list = ignore_tests_list + ["test_create_single_client_memory_constant"] %}     # [py==314 and osx]
+{% set ignore_tests_list = ignore_tests_list + ["test_create_single_paginator_memory_constant"] %}  # [py==314 and osx]
 
 test:
   source_files:
@@ -120,7 +119,7 @@ about:
   description: |
     Provides the core functionality of Boto3, the AWS SDK for Python
   dev_url: https://github.com/boto/botocore
-  doc_url: https://docs.aws.amazon.com/botocore/latest
+  doc_url: https://botocore.amazonaws.com/v1/documentation/api/latest/index.html
 
 extra:
   recipe-maintainers:
