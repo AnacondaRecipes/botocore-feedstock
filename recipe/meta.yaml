@@ -36,8 +36,11 @@ requirements:
 #   - botocore.exceptions.ClientError: An error occurred (NoSuchBucket) when calling the GetObject operation: The specified bucket does not exist
 # Skipping integration tests:
 # tests/functional/leak/test_resource_leaks.py:39: AssertionError
-
 {% set ignore_tests = " --ignore=tests/integration/" %}
+# E   botocore.exceptions.InvalidConfigError: Invalid CA bundle
+{% set ignore_tests = ignore_tests + " --ignore=tests/functional/test_public_apis.py" %}
+{% set ignore_tests = ignore_tests + " --ignore=tests/functional/test_waiter_config.py" %}
+
 {% set ignore_tests_list = [
 
 ] %}
