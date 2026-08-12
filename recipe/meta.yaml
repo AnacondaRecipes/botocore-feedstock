@@ -46,6 +46,7 @@ requirements:
 {% set ignore_tests_list = ignore_tests_list + ["test_create_single_client_memory_constant"] %}  # [linux]
 {% set ignore_tests_list = ignore_tests_list + ["test_create_single_paginator_memory_constant"] %}  # [linux]
 {% set ignore_tests_list = ignore_tests_list + ["test_create_single_waiter_memory_constant"] %}  # [linux]
+{% set ignore_tests_list = ignore_tests_list + ["test_create_memory_waiters_in_loop"] %}  # [py==313 and linux]
 
 test:
   source_files:
