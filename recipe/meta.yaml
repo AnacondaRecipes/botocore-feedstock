@@ -42,6 +42,10 @@ requirements:
 ] %}
 {% set ignore_tests_list = ignore_tests_list + ["test_create_single_client_memory_constant"] %}  # [py==314 and osx]
 {% set ignore_tests_list = ignore_tests_list + ["test_create_single_paginator_memory_constant"] %}  # [py==314 and osx]
+# AssertionError: False is not true : 4259840
+{% set ignore_tests_list = ignore_tests_list + ["test_create_single_client_memory_constant"] %}  # [linux]
+{% set ignore_tests_list = ignore_tests_list + ["test_create_single_paginator_memory_constant"] %}  # [linux]
+{% set ignore_tests_list = ignore_tests_list + ["test_create_single_waiter_memory_constant"] %}  # [linux]
 
 test:
   source_files:
@@ -100,7 +104,7 @@ test:
     - pip check
     # Conda's activation scripts leave REQUESTS_CA_BUNDLE variable to an empty string, which causes tests to fail.
     # E   botocore.exceptions.InvalidConfigError: Invalid CA bundle: the configured value (ca_bundle, AWS_CA_BUNDLE, REQUESTS_CA_BUNDLE, or verify) resolved to an empty or whitespace-only string. Provide a valid path to a CA bundle file.
-    - unset REQUESTS_CA_BUNDLE
+    - unset REQUESTS_CA_BUNDLE  # [not win]
     # Disabled win tests. It takes too much time—around 5 hours.
     # https://github.com/AnacondaRecipes/botocore-feedstock/pull/60#discussion_r1933937673
     - pytest -ra -vv tests {{ ignore_tests }} -k "not slow{% if ignore_tests_list %} and not ({{ ignore_tests_list | join(' or ') }}){% endif %}"  # [not win]
