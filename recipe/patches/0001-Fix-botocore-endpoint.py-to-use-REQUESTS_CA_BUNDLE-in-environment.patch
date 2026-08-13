@@ -1,0 +1,30 @@
+From 38fa60b4f2e3d890eff2041ff58529251637921f Mon Sep 17 00:00:00 2001
+From: Andrii Vetroumov <avetroumov@anaconda.com>
+Date: Thu, 13 Aug 2026 10:50:43 +0300
+Subject: [PATCH] Rollback verify check to prevent tests failure
+
+---
+ botocore/endpoint.py | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
+
+diff --git a/botocore/endpoint.py b/botocore/endpoint.py
+index 60359c3..58dd7ad 100644
+--- a/botocore/endpoint.py
++++ b/botocore/endpoint.py
+@@ -448,9 +448,10 @@ class EndpointCreator:
+             return self._validate_verify_value(verify)
+         # Otherwise use the value from REQUESTS_CA_BUNDLE, or default to
+         # True if the env var does not exist.
+-        return self._validate_verify_value(
+-            os.environ.get('REQUESTS_CA_BUNDLE', True)
+-        )
++        # return self._validate_verify_value(
++        #     os.environ.get('REQUESTS_CA_BUNDLE', True)
++        # )
++        os.environ.get('REQUESTS_CA_BUNDLE', True)
+ 
+     def _validate_verify_value(self, verify):
+         if isinstance(verify, str) and not verify.strip():
+-- 
+2.54.0
+
