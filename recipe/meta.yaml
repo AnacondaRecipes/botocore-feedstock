@@ -8,8 +8,6 @@ package:
 source:
   url: https://pypi.org/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
   sha256: a6c7ac88724c96f2ad5a7657f87d545d8218a74a1b219ba4397e3d37481941cd
-  patches:
-    - patches/0001-Fix-botocore-endpoint.py-to-use-REQUESTS_CA_BUNDLE-in-environment.patch
 
 build:
   number: 0
@@ -51,18 +49,12 @@ requirements:
 {% set ignore_tests_list = ignore_tests_list + ["test_create_memory_waiters_in_loop"] %}  # [py==313 and linux]
 # E       assert None == ClientContext(features=set())
 {% set ignore_tests_list = ignore_tests_list + ["test_get_context_returns_current"] %}
-# E       AttributeError: 'NoneType' object has no attribute 'features'
+# # E       AttributeError: 'NoneType' object has no attribute 'features'
 {% set ignore_tests_list = ignore_tests_list + ["test_register_unknown_feature_id_skips"] %}
-# E       AttributeError: 'NoneType' object has no attribute 'features'
+# # E       AttributeError: 'NoneType' object has no attribute 'features'
 {% set ignore_tests_list = ignore_tests_list + ["test_register_feature_id"] %}
-# E       AssertionError: assert ['A'] == ['A', 'B']
+# # E       AssertionError: assert ['A'] == ['A', 'B']
 {% set ignore_tests_list = ignore_tests_list + ["test_user_agent_string_with_registered_features"] %}
-# E       AssertionError: None != '/env/cacerts.pem'
-{% set ignore_tests_list = ignore_tests_list + ["test_honor_cert_bundle_env_var"] %}
-# E       AssertionError: None is not true
-{% set ignore_tests_list = ignore_tests_list + ["test_get_endpoint_default_verify_ssl"] %}
-# E       AssertionError: InvalidConfigError not raised
-{% set ignore_tests_list = ignore_tests_list + ["test_empty_cert_bundle_env_var_raises"] %}
 
 test:
   source_files:
@@ -119,13 +111,20 @@ test:
     - botocore.waiter
   commands:
     - pip check
+    # Tests require a valid CA bundle with the path to certificates.
+    - export REQUESTS_CA_BUNDLE=/ssl/cacert.pem
     # Disabled win tests. It takes too much time—around 5 hours.
     # https://github.com/AnacondaRecipes/botocore-feedstock/pull/60#discussion_r1933937673
-    - pytest -ra -vv tests {{ ignore_tests }} -k "not slow{% if ignore_tests_list %} and not ({{ ignore_tests_list | join(' or ') }}){% endif %}"  # [not win]
+    - pytest -n auto --reactor=asyncio -ra -vv tests {{ ignore_tests }} -k "not slow{% if ignore_tests_list %} and not ({{ ignore_tests_list | join(' or ') }}){% endif %}"  # [not win]
   requires:
     - pip
     - pytest >=8.1.1
     - jsonschema >=4.23.0
+    # Tests require a valid CA bundle with the path to certificates.
+    # ca-certificates contains the certificates.
+    - ca-certificates
+    - pytest-xdist
+    - pytest-twisted
 
 about:
   home: https://aws.amazon.com/sdk-for-python
