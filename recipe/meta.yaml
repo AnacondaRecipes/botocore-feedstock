@@ -36,7 +36,7 @@ requirements:
 #   - botocore.exceptions.ClientError: An error occurred (NoSuchBucket) when calling the GetObject operation: The specified bucket does not exist
 # Skipping integration tests:
 # tests/functional/leak/test_resource_leaks.py:39: AssertionError
-{% set ignore_tests = " --ignore=tests/integration/" %}
+{% set ignore_tests = " --ignore=tests/integration/" %}  # [not win]
 {% set ignore_tests_list = [
 
 ] %}
@@ -48,13 +48,13 @@ requirements:
 {% set ignore_tests_list = ignore_tests_list + ["test_create_single_waiter_memory_constant"] %}  # [linux]
 {% set ignore_tests_list = ignore_tests_list + ["test_create_memory_waiters_in_loop"] %}  # [py==313 and linux]
 # E       assert None == ClientContext(features=set())
-{% set ignore_tests_list = ignore_tests_list + ["test_get_context_returns_current"] %}
+{% set ignore_tests_list = ignore_tests_list + ["test_get_context_returns_current"] %}  # [not win]
 # # E       AttributeError: 'NoneType' object has no attribute 'features'
-{% set ignore_tests_list = ignore_tests_list + ["test_register_unknown_feature_id_skips"] %}
+{% set ignore_tests_list = ignore_tests_list + ["test_register_unknown_feature_id_skips"] %}  # [not win]
 # # E       AttributeError: 'NoneType' object has no attribute 'features'
-{% set ignore_tests_list = ignore_tests_list + ["test_register_feature_id"] %}
+{% set ignore_tests_list = ignore_tests_list + ["test_register_feature_id"] %}  # [not win]
 # # E       AssertionError: assert ['A'] == ['A', 'B']
-{% set ignore_tests_list = ignore_tests_list + ["test_user_agent_string_with_registered_features"] %}
+{% set ignore_tests_list = ignore_tests_list + ["test_user_agent_string_with_registered_features"] %}  # [not win]
 
 test:
   source_files:
@@ -112,7 +112,7 @@ test:
   commands:
     - pip check
     # Tests require a valid CA bundle with the path to certificates.
-    - export REQUESTS_CA_BUNDLE=/ssl/cacert.pem
+    - export REQUESTS_CA_BUNDLE=/ssl/cacert.pem  # [not win]
     # Disabled win tests. It takes too much time—around 5 hours.
     # https://github.com/AnacondaRecipes/botocore-feedstock/pull/60#discussion_r1933937673
     - pytest -ra -vv tests {{ ignore_tests }} -k "not slow{% if ignore_tests_list %} and not ({{ ignore_tests_list | join(' or ') }}){% endif %}"  # [not win]
