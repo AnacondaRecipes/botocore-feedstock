@@ -110,9 +110,9 @@ test:
     - botocore.vendored.requests.packages.urllib3
     - botocore.waiter
   commands:
-    - pip check
     # Tests require a valid CA bundle with the path to certificates.
-    - export REQUESTS_CA_BUNDLE=/ssl/cacert.pem  # [not win]
+    - export REQUESTS_CA_BUNDLE=$PREFIX/ssl/cacert.pem  # [not win]
+    - pip check
     # Disabled win tests. It takes too much time—around 5 hours.
     # https://github.com/AnacondaRecipes/botocore-feedstock/pull/60#discussion_r1933937673
     - pytest -ra -vv tests {{ ignore_tests }} -k "not slow{% if ignore_tests_list %} and not ({{ ignore_tests_list | join(' or ') }}){% endif %}"  # [not win]
