@@ -9,13 +9,10 @@ source:
   url: https://pypi.org/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
   sha256: a6c7ac88724c96f2ad5a7657f87d545d8218a74a1b219ba4397e3d37481941cd
 
+# Script section is covered by the build.sh and bld.bat files
 build:
   number: 0
-  script: {{ PYTHON }} -m pip install . --no-deps --ignore-installed --no-cache-dir --no-build-isolation -vv
   skip: true  # [py<310]
-  script_env:
-    - REQUESTS_CA_BUNDLE=$PREFIX/ssl/cacert.pem  # [not win]
-    - REQUESTS_CA_BUNDLE=%PREFIX%\Library\ssl\cacert.pem  # [win]
 
 requirements:
   host:
@@ -29,6 +26,7 @@ requirements:
     - jmespath >=0.7.1,<2.0.0
     - python-dateutil >=2.1,<3.0.0
     - urllib3 >=1.25.4,!=2.2.0,<3
+    - ca-certificates
   run_constrained:
     # crt
     - awscrt ==0.36.0
@@ -48,7 +46,7 @@ requirements:
 # AssertionError: False is not true : 4259840
 {% set ignore_tests_list = ignore_tests_list + ["test_create_single_client_memory_constant"] %}  # [linux]
 {% set ignore_tests_list = ignore_tests_list + ["test_create_single_paginator_memory_constant"] %}  # [linux]
-{% set ignore_tests_list = ignore_tests_list + ["test_create_single_waiter_memory_constant"] %}  # [linux]
+{% set ignore_tests_list = ignore_tests_list + ["test_create_single_waiter_memory_constant"] %}
 {% set ignore_tests_list = ignore_tests_list + ["test_create_memory_waiters_in_loop"] %}  # [py==313 and linux]
 # E       assert None == ClientContext(features=set())
 {% set ignore_tests_list = ignore_tests_list + ["test_get_context_returns_current"] %}  # [not win]
@@ -123,9 +121,6 @@ test:
     - pip
     - pytest >=8.1.1
     - jsonschema >=4.23.0
-    # Tests require a valid CA bundle with the path to certificates.
-    # ca-certificates contains needed certificates.
-    - ca-certificates
 
 about:
   home: https://aws.amazon.com/sdk-for-python
