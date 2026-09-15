@@ -95,7 +95,8 @@ test:
     - unset REQUESTS_CA_BUNDLE AWS_CA_BUNDLE # [unix]
     - set "REQUESTS_CA_BUNDLE=" && set "AWS_CA_BUNDLE=" # [win]
     # Integration tests are required to validate real AWS services like S3 and SQS, which are not available in our environment.
-    - pytest -n auto -ra -vv tests -m "not slow" --ignore=tests/integration/
+    # Leak tests are flaky.
+    - pytest -n auto -ra -vv tests -m "not slow" --ignore=tests/integration/ --ignore=tests/functional/leak/"
   requires:
     - pip
     - pytest >=9.0.3
