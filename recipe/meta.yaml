@@ -9,9 +9,9 @@ source:
   url: https://pypi.org/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
   sha256: a6c7ac88724c96f2ad5a7657f87d545d8218a74a1b219ba4397e3d37481941cd
 
-# Script section is covered by the build.sh and bld.bat files
 build:
   number: 0
+  script: {{ PYTHON }} -m pip install . --no-deps --ignore-installed --no-cache-dir --no-build-isolation -vv
   skip: true  # [py<310]
 
 requirements:
@@ -26,42 +26,16 @@ requirements:
     - jmespath >=0.7.1,<2.0.0
     - python-dateutil >=2.1,<3.0.0
     - urllib3 >=1.25.4,!=2.2.0,<3
-    - ca-certificates
+    # botocore uses certifi when importable, instead of vendored cacert.pem
+    - certifi
   run_constrained:
     # crt
-    - awscrt ==0.36.0
-
-# Integration tests are required to validate real AWS services like S3 and SQS, which are not available in our environment.
-# Error example:
-#   - botocore.exceptions.NoCredentialsError: Unable to locate credentials
-#   - botocore.exceptions.ClientError: An error occurred (NoSuchBucket) when calling the GetObject operation: The specified bucket does not exist
-# Skipping integration tests:
-# tests/functional/leak/test_resource_leaks.py:39: AssertionError
-{% set ignore_tests = " --ignore=tests/integration/" %}  # [not win]
-{% set ignore_tests_list = [
-
-] %}
-{% set ignore_tests_list = ignore_tests_list + ["test_create_single_client_memory_constant"] %}  # [py==314 and osx]
-{% set ignore_tests_list = ignore_tests_list + ["test_create_single_paginator_memory_constant"] %}  # [py==314 and osx]
-# AssertionError: False is not true : 4259840
-{% set ignore_tests_list = ignore_tests_list + ["test_create_single_client_memory_constant"] %}  # [linux]
-{% set ignore_tests_list = ignore_tests_list + ["test_create_single_paginator_memory_constant"] %}  # [linux]
-{% set ignore_tests_list = ignore_tests_list + ["test_create_single_waiter_memory_constant"] %}
-{% set ignore_tests_list = ignore_tests_list + ["test_create_memory_waiters_in_loop"] %}  # [py==313 and linux]
-# E       assert None == ClientContext(features=set())
-{% set ignore_tests_list = ignore_tests_list + ["test_get_context_returns_current"] %}  # [not win]
-# # E       AttributeError: 'NoneType' object has no attribute 'features'
-{% set ignore_tests_list = ignore_tests_list + ["test_register_unknown_feature_id_skips"] %}  # [not win]
-# # E       AttributeError: 'NoneType' object has no attribute 'features'
-{% set ignore_tests_list = ignore_tests_list + ["test_register_feature_id"] %}  # [not win]
-# # E       AssertionError: assert ['A'] == ['A', 'B']
-{% set ignore_tests_list = ignore_tests_list + ["test_user_agent_string_with_registered_features"] %}  # [not win]
-# E       AssertionError: False is not true : 5980160
-{% set ignore_tests_list = ignore_tests_list + ["test_create_memory_clients_in_loop"] %}
+    - awscrt >=0.36.0 # loosened to ensure broader compatibility
 
 test:
   source_files:
     - tests
+    - pyproject.toml
   imports:
     - botocore
     - botocore.args
@@ -114,16 +88,24 @@ test:
     - botocore.waiter
   commands:
     - pip check
-    # Disabled win tests. It takes too much time—around 5 hours.
-    # https://github.com/AnacondaRecipes/botocore-feedstock/pull/60#discussion_r1933937673
-    - pytest -ra -vv tests {{ ignore_tests }} -k "not slow{% if ignore_tests_list %} and not ({{ ignore_tests_list | join(' or ') }}){% endif %}"  # [not win]
+    # conda-build exports REQUESTS_CA_BUNDLE="" when unset on the host
+    # (conda_build/environ.py); botocore >=1.43.54 rejects empty CA-bundle
+    # values at client creation. Neutralize it for the test run.
+    # Addressed by https://github.com/conda/conda-build/pull/6083 (not released yet)
+    - unset REQUESTS_CA_BUNDLE AWS_CA_BUNDLE # [unix]
+    - set "REQUESTS_CA_BUNDLE=" && set "AWS_CA_BUNDLE=" # [win]
+    # Integration tests are required to validate real AWS services like S3 and SQS, which are not available in our environment.
+    - pytest -n auto -ra -vv tests -m "not slow" --ignore=tests/integration/
   requires:
     - pip
-    - pytest >=8.1.1
+    - pytest >=9.0.3
+    - pytest-xdist >=3.5.0
     - jsonschema >=4.23.0
+    - atomicwrites >=1.0 # [win]
+    - colorama >0.3.0 # [win]
 
 about:
-  home: https://aws.amazon.com/sdk-for-python
+  home: https://aws.amazon.com/sdk-for-python/
   license: Apache-2.0
   license_family: Apache
   license_file:
@@ -135,7 +117,7 @@ about:
   description: |
     Provides the core functionality of Boto3, the AWS SDK for Python
   dev_url: https://github.com/boto/botocore
-  doc_url: https://botocore.amazonaws.com/v1/documentation/api/latest/index.html
+  doc_url: https://docs.aws.amazon.com/botocore/latest/
 
 extra:
   recipe-maintainers:
@@ -143,5 +125,3 @@ extra:
     - hajapy
     - tkelman
     - ocefpaf
-  skip-lints:
-    - reachable_url
