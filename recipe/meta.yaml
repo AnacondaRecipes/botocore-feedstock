@@ -1,5 +1,5 @@
 {% set name = "botocore" %}
-{% set version = "1.43.68" %}
+{% set version = "1.43.117" %}
 
 package:
   name: {{ name }}
@@ -7,7 +7,7 @@ package:
 
 source:
   url: https://pypi.org/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
-  sha256: a6c7ac88724c96f2ad5a7657f87d545d8218a74a1b219ba4397e3d37481941cd
+  sha256: 71993702832cc37c2495048b9945f2929d306fccb3fb767e9964e437e637fa6c
 
 build:
   number: 0
@@ -88,10 +88,10 @@ test:
     - botocore.waiter
   commands:
     - pip check
-    # conda-build exports REQUESTS_CA_BUNDLE="" when unset on the host
+    # conda-build <26.9.0 exports REQUESTS_CA_BUNDLE="" when unset on the host
     # (conda_build/environ.py); botocore >=1.43.54 rejects empty CA-bundle
     # values at client creation. Neutralize it for the test run.
-    # Addressed by https://github.com/conda/conda-build/pull/6083 (not released yet)
+    # Fixed in conda-build 26.9.0 (conda/conda-build#6083); drop once PBP uses >=26.9.0.
     - unset REQUESTS_CA_BUNDLE AWS_CA_BUNDLE # [unix]
     - set "REQUESTS_CA_BUNDLE=" && set "AWS_CA_BUNDLE=" # [win]
     # Integration tests are required to validate real AWS services like S3 and SQS, which are not available in our environment.
