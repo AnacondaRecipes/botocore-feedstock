@@ -1,5 +1,5 @@
 {% set name = "botocore" %}
-{% set version = "1.43.117" %}
+{% set version = "1.43.123" %}
 
 package:
   name: {{ name }}
@@ -7,7 +7,7 @@ package:
 
 source:
   url: https://pypi.org/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
-  sha256: 71993702832cc37c2495048b9945f2929d306fccb3fb767e9964e437e637fa6c
+  sha256: 80948cb9b1cdf1a1a25809089a42e3a1bc4af0258d198222db6e97dcc660dd0c
 
 build:
   number: 0
@@ -30,7 +30,7 @@ requirements:
     - certifi
   run_constrained:
     # crt
-    - awscrt >=0.36.0 # loosened to ensure broader compatibility
+    - awscrt >=0.38.0 # loosened to ensure broader compatibility
 
 test:
   source_files:
