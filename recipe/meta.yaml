@@ -1,5 +1,5 @@
 {% set name = "botocore" %}
-{% set version = "1.43.123" %}
+{% set version = "1.43.127" %}
 
 package:
   name: {{ name }}
@@ -7,7 +7,7 @@ package:
 
 source:
   url: https://pypi.org/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
-  sha256: 80948cb9b1cdf1a1a25809089a42e3a1bc4af0258d198222db6e97dcc660dd0c
+  sha256: 93bae360fb3a6f1b8e36593faa8bbbfa05b19866f7a37e9606a98f13394156f8
 
 build:
   number: 0
@@ -30,7 +30,7 @@ requirements:
     - certifi
   run_constrained:
     # crt
-    - awscrt >=0.38.0 # loosened to ensure broader compatibility
+    - awscrt ==0.38.0
 
 test:
   source_files:
@@ -92,8 +92,8 @@ test:
     # (conda_build/environ.py); botocore >=1.43.54 rejects empty CA-bundle
     # values at client creation. Neutralize it for the test run.
     # Fixed in conda-build 26.9.0 (conda/conda-build#6083); drop once PBP uses >=26.9.0.
-    - unset REQUESTS_CA_BUNDLE AWS_CA_BUNDLE # [unix]
-    - set "REQUESTS_CA_BUNDLE=" && set "AWS_CA_BUNDLE=" # [win]
+    - unset REQUESTS_CA_BUNDLE AWS_CA_BUNDLE  # [unix]
+    - set "REQUESTS_CA_BUNDLE=" && set "AWS_CA_BUNDLE="  # [win]
     # Integration tests are required to validate real AWS services like S3 and SQS, which are not available in our environment.
     # Leak tests are flaky.
     - pytest -n auto -ra tests -m "not slow" --ignore=tests/integration/ --ignore=tests/functional/leak/
@@ -102,8 +102,8 @@ test:
     - pytest >=9.0.3
     - pytest-xdist >=3.5.0
     - jsonschema >=4.23.0
-    - atomicwrites >=1.0 # [win]
-    - colorama >0.3.0 # [win]
+    - atomicwrites >=1.0  # [win]
+    - colorama >0.3.0  # [win]
 
 about:
   home: https://aws.amazon.com/sdk-for-python/
