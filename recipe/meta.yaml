@@ -27,7 +27,7 @@ requirements:
     - python-dateutil >=2.1,<3.0.0
     - urllib3 >=1.25.4,!=2.2.0,<3
     # botocore uses certifi when importable, instead of vendored cacert.pem
-    - certifi
+    - certifi >=2026.10.23
   run_constrained:
     # crt
     - awscrt >=0.38.0 # loosened to ensure broader compatibility
